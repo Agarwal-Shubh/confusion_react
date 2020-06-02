@@ -6,7 +6,19 @@ class DishDetail extends Component{
     constructor(props){
         super(props);
     }
-    
+     renderDish(dish){
+        <Card>
+                <CardImg top src={dish.image} alt={dish.name} />
+                <CardBody>
+                    <CardTitle>
+                        {dish.name}
+                    </CardTitle>
+                    <CardText>
+                        {dish.description}
+                    </CardText>
+                </CardBody>
+            </Card>
+    }
     render(){
         const commentList = this.props.dish.comments.map(item => (
             <p> {item.comment}
@@ -19,17 +31,7 @@ class DishDetail extends Component{
         return(
         <div className="row">
             <div className="col-12 col-md-5 m-1">
-            <Card>
-                <CardImg top src={this.props.dish.image} alt={this.props.dish.name} />
-                <CardBody>
-                    <CardTitle>
-                        {this.props.dish.name}
-                    </CardTitle>
-                    <CardText>
-                        {this.props.dish.description}
-                    </CardText>
-                </CardBody>
-            </Card>
+            <renderDish {...this.props.dish} /> 
             </div>
             <div className="col-sm-12 col-md-5 m-1">
                 <h4>Comments</h4>
