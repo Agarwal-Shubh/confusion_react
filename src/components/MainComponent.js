@@ -11,6 +11,7 @@ import {LEADERS} from '../shared/leaders';
 import {COMMENTS} from '../shared/comments';
 import {PROMOTIONS} from '../shared/promotions';
 import { Switch, Route, Redirect } from 'react-router-dom';
+import About from './AboutComponent';
 import '../App.css';
 
 class Main extends Component {
@@ -56,6 +57,7 @@ const DishWithId=({match})=>{
             <Route exact path='/menu' component={()=><Menu dishes={this.state.dishes} />} />
             <Route path="/menu/:dishId" component={DishWithId} />
             <Route path='/contactus' component={Contact} />
+            <Route path='/aboutus' component={()=><About leaders={this.state.leaders} />} />
             <Redirect to='/home' /> 
         </Switch>
         <Footer />
