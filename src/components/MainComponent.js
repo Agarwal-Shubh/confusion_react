@@ -24,13 +24,6 @@ class Main extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-        dishes: DISHES,
-        promotions:PROMOTIONS,
-        leaders:LEADERS,
-        comments:COMMENTS,
-        selectedDish: null
-    };
   }
 
   onDishSelect(dishId) {
