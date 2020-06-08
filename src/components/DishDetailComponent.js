@@ -6,7 +6,8 @@ import { Component } from 'react';
 import {Control, Errors,LocalForm} from 'react-redux-form';
 import {Modal, ModalHeader,ModalBody,Row,Col,Label} from 'reactstrap';
 import {Loading} from './LoadingComponent';
-
+import {baseUrl} from '../shared/baseUrl';
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -31,7 +32,7 @@ class CommentForm extends Component{
 
     handleSubmit(values) {
         this.toggleModal();
-        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+        this.props.postComment(this.props.dishId, values.rating, values.author, values.comment);
     }
     render(){
     return (
@@ -101,8 +102,13 @@ class CommentForm extends Component{
 }
     function RenderDish({dish}){
          return (
+            <FadeTransform
+            in
+            transformProps={{
+                exitTransform: 'scale(0.5) translateY(-50%)'
+            }}>
         <Card>
-             <CardImg top src={dish.image} alt={dish.name} />
+             <CardImg top src={baseUrl + dish.image} alt={dish.name} />
                 <CardBody>
                     <CardTitle>
                         {dish.name}
@@ -112,30 +118,27 @@ class CommentForm extends Component{
                     </CardText>
                 </CardBody>
             </Card>
+            </FadeTransform>
          )
         }
-    function RenderComments({comments,addComment,dishId}){
-             if (comments != null){
-
-                const commentList =comments.map( (comment) => {
-                    return(
-                      <div key={comment.id}>
-                          <li>{comment.comment}</li>
-                          <li>-- {comment.author}, {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</li>
-                      </div>
-                    );
-                  });
-
-
+    function RenderComments({comments,postComment,dishId}){
+        if (comments != null){
               return(
-                <div>
-                  <ul className="list-unstyled">
-                    {commentList}
-                  </ul>
-                  <CommentForm dishId={dishId} addComment={addComment} />
-                </div>
-                  
-              );
+                
+                <Stagger in>
+                {comments.map((comment) => {
+                    return (
+                        <Fade in>
+                        <li key={comment.id}>
+                        <p>{comment.comment}</p>
+                        <p>-- {comment.author} , {new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: '2-digit'}).format(new Date(Date.parse(comment.date)))}</p>
+                        </li>
+                        </Fade>
+                    );
+                })}
+                <CommentForm dishId={dishId} postComment={postComment} />
+                </Stagger>
+              )
             }
             else {
               return(
@@ -185,7 +188,7 @@ class CommentForm extends Component{
             <div className="col-sm-12 col-md-5 m-1"> 
                 <h4>Comments</h4>
              <RenderComments comments={props.comments}
-                addComment={props.addComment}
+                postComment={props.postComment}
                 dishId={props.dish.id} />
             
             </div>
